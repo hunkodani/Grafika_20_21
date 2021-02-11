@@ -1,1 +1,7 @@
-# Grafika_20_21
+# Repository információk, és a feladat bemutatása
+
+Információk:
+  -
+
+Feladat bemutatása:
+  -
