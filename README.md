@@ -14,14 +14,9 @@ Ezen kívül a pilóták célzó képességét is tesztelik ezen teszt során. A
 
 Irányítás:
 
- W, A, S, D         -- kamera/ X-wing irányítás (előre, hátra, balra, jobbra)
- 
- Q, E               -- kamera/ X-wing fel-le mozgása
- 
- P                  -- "pause mód", azaz a kamerával spectator módban lehet mozogni
- 
- Egér X tengely     -- pause módban a kamera jobbra-balra forgatása
- 
- Egér Y tengely     -- pause módban a kamera fel-le forgatása
- 
- Egér Bal gomb      -- X-wing lézerágyú lövés (1/ kattintás)
+* W, A, S, D         -- kamera/ X-wing irányítás (előre, hátra, balra, jobbra)
+* Q, E               -- kamera/ X-wing fel-le mozgása
+* P                  -- "pause mód", azaz a kamerával spectator módban lehet mozogni
+* Egér X tengely     -- pause módban a kamera jobbra-balra forgatása
+* Egér Y tengely     -- pause módban a kamera fel-le forgatása
+* Egér Bal gomb      -- X-wing lézerágyú lövés (1/ kattintás)
