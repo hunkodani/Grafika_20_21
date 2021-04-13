@@ -14,8 +14,10 @@ Ezen kívül a pilóták célzó képességét is tesztelik ezen teszt során. A
 
 Szükséges letöltendő fájlok:
 
-* Modellek, és textúrák (a mappa helye a gyökérmappában van - ahol a Makefile is van): https://drive.google.com/file/d/1p7v5z5AFPaYdD0MVDkOUVGd1mRVScHUm/view?usp=sharing
-* MinGW és shell (akkor szükséges, ha nincs benne a MinGW-ben a modell betöltő rendszer): https://drive.google.com/file/d/16LMcWGxU-aTSjBGwMduy_DCOPdtcz-6W/view?usp=sharing
+* Modellek, és textúrák (a mappa helye a gyökérmappában van - ahol a Makefile is van): 
+https://drive.google.com/file/d/1p7v5z5AFPaYdD0MVDkOUVGd1mRVScHUm/view?usp=sharing
+* MinGW és shell (akkor szükséges, ha nincs benne a MinGW-ben a modell betöltő rendszer): 
+https://drive.google.com/file/d/16LMcWGxU-aTSjBGwMduy_DCOPdtcz-6W/view?usp=sharing
 
 Irányítás:
 
