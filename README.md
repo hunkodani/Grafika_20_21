@@ -12,6 +12,11 @@ Ezt a gépet a pilóták tanítására/ gyakorlatoztatására használják, amel
 
 Ezen kívül a pilóták célzó képességét is tesztelik ezen teszt során. Az X-wing-nek a 4 szárnya végén egy-egy lézerágyú helyezkedik el, melyből képes a teszt során lőni (sorrend: bal felső, jobb felső, bal alsó, jobb alsó). A megadott tárgyakat el kell eltalálni a lézerágyúval, és meg kell semmisíteni. Ezek az objektumok méretileg akkorák, hogy egy kezdő pilóta is el tudja találni, ha egyenesen repül felé. (nagyobb, mint az X-wing fesztávja, és magasabb mint a gép) Az objektum sikeres megsemmisítése után egy másik számláló növekszik, mely a megsemmisített elemek számát jelöli.
 
+Szükséges letöltendő fájlok:
+
+* Modellek, és textúrák (a mappa helye a gyökérmappában van - ahol a Makefile is van): https://drive.google.com/file/d/1p7v5z5AFPaYdD0MVDkOUVGd1mRVScHUm/view?usp=sharing
+* MinGW és shell (akkor szükséges, ha nincs benne a MinGW-ben a modell betöltő rendszer): https://drive.google.com/file/d/16LMcWGxU-aTSjBGwMduy_DCOPdtcz-6W/view?usp=sharing
+
 Irányítás:
 
 * X-wing:
