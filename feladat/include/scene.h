@@ -47,7 +47,7 @@ void set_material(const Material* material);
 /**
  * Draw the scene objects.
  */
-void draw_scene(Scene* scene, Camera* camera);
+void draw_scene(Scene* scene);
 
 /**
  * Draw the origin of the world coordinate system.

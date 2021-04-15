@@ -11,7 +11,7 @@ void display()
 
     /*glPushMatrix();*/
     set_view(&camera);
-    draw_scene(&scene, &camera);
+    draw_scene(&scene);
     /*glPopMatrix();*/
 
     if (is_help_visible) {
@@ -221,8 +221,15 @@ void idle()
     elapsed_time = (double)(current_time - last_frame_time) / 1000;
     last_frame_time = current_time;
 
-    update_object(&(scene.xwing), elapsed_time);
-    update_camera(&camera, elapsed_time);
+    if (scene.isPaused)
+    {
+        update_camera(&camera, elapsed_time);
+    }
+    else
+    {
+        update_object(&(scene.xwing), elapsed_time, &camera);
+    }
+
     update_lasers(scene.lasers, elapsed_time);
 
     rotate_object(&(scene.geostatObj), 0.006, 0);

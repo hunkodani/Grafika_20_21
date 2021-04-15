@@ -121,7 +121,7 @@ void set_material(const Material* material)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
-void draw_scene(Scene* scene, Camera* camera)
+void draw_scene(Scene* scene)
 {
     int i, j;
 
@@ -139,10 +139,6 @@ void draw_scene(Scene* scene, Camera* camera)
         glRotatef(scene->xwing.rotation.z, 0.0f, 0.0f, 1.0f);
         glScalef(0.25f, 0.25f, 0.25f);
         draw_model(&(scene->xwing.model));
-
-        if (!scene->isPaused) {
-            follow_object(camera, &(scene->xwing));
-        }
     glPopMatrix();
 
     for (i = 0; i < 2; i++)
