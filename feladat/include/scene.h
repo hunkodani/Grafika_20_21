@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "texture.h"
 #include "object_logic.h"
+#include <stdbool.h>
 
 typedef struct Scene
 {
@@ -13,10 +14,10 @@ typedef struct Scene
     Object dest_point[2];
     Object target[2];
     Material material;
-    BOOLEAN isPaused;
+    bool isPaused;
     double lightIntensity;
     float fogIntensity;
-    BOOLEAN origin;
+    bool origin;
 } Scene;
 
 /**

@@ -65,6 +65,11 @@ void rotate_object(Object* object, double horizontal, double vertical)
     if (object->rotation.x > 360.0) {
         object->rotation.x -= 360.0;
     }
+
+    /*if (!(strcmp(object->name, "xwing")))     //causing "glitches" if assigning here
+    {
+        camera->rotation.z = object->rotation.z;
+    }*/
 }
 
 void set_object_speed(Object* object, double speed)
@@ -216,7 +221,36 @@ Bounding_Box get_bounding_box(Model* model, vec3* position)
     return bounding;
 }
 
-_Bool is_collide(Bounding_Box bound1, Bounding_Box bound2) {
+bool is_collide(Bounding_Box bound1, Bounding_Box bound2) {
+
+    /*For the debug of the collision*/
+    /*glDisable(GL_LIGHTING);
+    glBegin(GL_QUADS);
+    glVertex3f(bound1.min_x, bound1.min_y, bound1.min_z);
+    glVertex3f(bound1.min_x, bound1.min_y, bound1.max_z);
+    glVertex3f(bound1.min_x, bound1.max_y, bound1.min_z);
+    glVertex3f(bound1.min_x, bound1.max_y, bound1.max_z);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3f(bound1.max_x, bound1.min_y, bound1.min_z);
+    glVertex3f(bound1.max_x, bound1.min_y, bound1.max_z);
+    glVertex3f(bound1.max_x, bound1.max_y, bound1.min_z);
+    glVertex3f(bound1.max_x, bound1.max_y, bound1.max_z);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3f(bound1.min_x, bound1.min_y, bound1.min_z);
+    glVertex3f(bound1.min_x, bound1.min_y, bound1.max_z);
+    glVertex3f(bound1.max_x, bound1.min_y, bound1.min_z);
+    glVertex3f(bound1.max_x, bound1.min_y, bound1.max_z);
+    glEnd();
+    glBegin(GL_QUADS);
+    glVertex3f(bound1.min_x, bound1.max_y, bound1.min_z);
+    glVertex3f(bound1.min_x, bound1.max_y, bound1.max_z);
+    glVertex3f(bound1.max_x, bound1.max_y, bound1.min_z);
+    glVertex3f(bound1.max_x, bound1.max_y, bound1.max_z);
+    glEnd();
+    glEnable(GL_LIGHTING);*/
+
     /*Check every point of the box (8 point)*/
     if (collision_test(bound1, bound2.min_x, bound2.min_y, bound2.min_z))
     {
@@ -255,7 +289,7 @@ _Bool is_collide(Bounding_Box bound1, Bounding_Box bound2) {
     }
 }
 
-_Bool collision_test(Bounding_Box bound, double x, double y, double z) {
+bool collision_test(Bounding_Box bound, double x, double y, double z) {
     if (bound.min_x <= x && x <= bound.max_x && bound.min_y <= y && y <= bound.max_y && bound.min_z <= z && z <= bound.max_z) {
         return TRUE;
     }

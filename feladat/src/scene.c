@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include <obj/load.h>
 #include <obj/draw.h>
+#include <obj/transform.h>
 #include <time.h>
 
 void init_scene(Scene* scene)
@@ -16,10 +17,15 @@ void init_scene(Scene* scene)
     weapon_rotation = 1;
     laser_travel_distance = 100;
 
+    /*xwing loading*/
     load_model(&scene->xwing.model, "resources/models/x-wing.obj");
+    strcpy(scene->xwing.name, "xwing");
+    scale_model(&scene->xwing.model, 0.25f, 0.25f, 0.25f);
     scene->xwing.texture = load_texture("resources/textures/Xwing_Albedo.png");
 
+    /*lasers loading*/
     load_model(&scene->lasers[0].model, "resources/models/laser.obj");
+    scale_model(&scene->lasers[0].model, 0.25f, 0.25f, 0.25f);
     scene->lasers[1].model = scene->lasers[0].model;
     scene->lasers[2].model = scene->lasers[0].model;
     scene->lasers[3].model = scene->lasers[0].model;
@@ -28,6 +34,7 @@ void init_scene(Scene* scene)
     scene->lasers[2].texture = scene->lasers[0].texture;
     scene->lasers[3].texture = scene->lasers[0].texture;
 
+    /*destinations loading*/
     load_model(&scene->dest_point[0].model, "resources/models/destination.obj");
     scene->dest_point[1].model = scene->dest_point[0].model;
     scene->dest_point[0].texture = load_texture("resources/textures/destination_Albedo.png");
@@ -35,6 +42,7 @@ void init_scene(Scene* scene)
     setNewRandPosAndRot(&scene->dest_point[0], &scene->xwing, 60);
     setNewRandPosAndRot(&scene->dest_point[1], &scene->xwing, 60);
 
+    /*targets loading*/
     load_model(&scene->target[0].model, "resources/models/cube.obj");
     scene->target[1].model = scene->target[0].model;
     scene->target[0].texture = load_texture("resources/textures/cross.png");
@@ -42,11 +50,10 @@ void init_scene(Scene* scene)
     setNewRandPosAndRot(&scene->target[0], &scene->xwing, 50);
     setNewRandPosAndRot(&scene->target[1], &scene->xwing, 50);
 
+    /*asteroid loading*/
     load_model(&scene->geostatObj.model, "resources/models/rocks.obj");
     scene->geostatObj.texture = load_texture("resources/textures/Rocks_Albedo.png");
-    /*scene->texture_id = load_texture("cube.png"); 
-
-    glBindTexture(GL_TEXTURE_2D, scene->texture_id);
+    /*glBindTexture(GL_TEXTURE_2D, scene->texture_id);
 
     scene->material.ambient.red = 0.2;
     scene->material.ambient.green = 0.2;
@@ -137,23 +144,24 @@ void draw_scene(Scene* scene)
         glBindTexture(GL_TEXTURE_2D, scene->xwing.texture);
         glTranslatef(scene->xwing.position.x, scene->xwing.position.y, scene->xwing.position.z);
         glRotatef(scene->xwing.rotation.z, 0.0f, 0.0f, 1.0f);
-        glScalef(0.25f, 0.25f, 0.25f);
         draw_model(&(scene->xwing.model));
     glPopMatrix();
 
+    for (j = 0; j < 2; j++)
+    {
+        /*needs to check if first collide to second or second collide to first (the second may contain the first, so first is not "collide with the second, because the points is outside")*/
+        if (is_collide(get_bounding_box(&scene->xwing.model, &scene->xwing.position), get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position))
+            || is_collide(get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position), get_bounding_box(&scene->xwing.model, &scene->xwing.position))
+            )
+        {
+            dest_counter++;
+            setNewRandPosAndRot(&scene->dest_point[j], &scene->xwing, 50);
+        }
+    }
+
     for (i = 0; i < 2; i++)
     {
-        for (j = 0; j < 2; j++)
-        {
-            /*needs to check if first collide to second or second collide to first (the second may contain the first, so first is not "collide with the second, because the points is outside")*/
-            if (is_collide(get_bounding_box(&scene->xwing.model, &scene->xwing.position), get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position))
-                || is_collide(get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position), get_bounding_box(&scene->xwing.model, &scene->xwing.position))
-                )
-            {
-                dest_counter++;
-                setNewRandPosAndRot(&scene->dest_point[j], &scene->xwing, 50);
-            }
-        }
+        
         glPushMatrix();
             glBindTexture(GL_TEXTURE_2D, scene->dest_point[i].texture);
             glTranslatef(scene->dest_point[i].position.x, scene->dest_point[i].position.y, scene->dest_point[i].position.z);
@@ -193,7 +201,6 @@ void draw_scene(Scene* scene)
             glBindTexture(GL_TEXTURE_2D, scene->lasers[i].texture);
             glPushMatrix();
                 glTranslatef(scene->lasers[i].position.x, scene->lasers[i].position.y, scene->lasers[i].position.z);
-                glScalef(0.25f, 0.25f, 0.25f);
                 glRotatef(scene->lasers[i].rotation.z, 0.0f, 0.0f, 1.0f);
                 draw_model(&(scene->lasers[i].model));
             glPopMatrix();

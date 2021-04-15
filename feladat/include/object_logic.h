@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "camera.h"
 #include "texture.h"
-
+#include <stdbool.h>
 #include <obj/model.h>
 
 /**
@@ -12,6 +12,7 @@
  */
 typedef struct {
     Model model;
+    char name[20];
     vec3 position;
     vec3 rotation;
     vec3 speed;
@@ -27,7 +28,7 @@ typedef struct {
     vec3 start_position;
     vec3 rotation;
     int texture;
-    _Bool is_alive;
+    bool is_alive;
 } Laser;
 
 /**
@@ -105,12 +106,12 @@ Bounding_Box get_bounding_box(Model* model, vec3* position);
 /**
  * Checks if two bounding box is colliding
  */
-_Bool is_collide(Bounding_Box bound1, Bounding_Box bound2);
+bool is_collide(Bounding_Box bound1, Bounding_Box bound2);
 
 /**
  * Checks if a point is in the bounding box
  */
-_Bool collision_test(Bounding_Box bound, double x, double y, double z);
+bool collision_test(Bounding_Box bound, double x, double y, double z);
 
 /**
  * Sets a new random position and random rotation of the given object relative to the xwing/ given object
