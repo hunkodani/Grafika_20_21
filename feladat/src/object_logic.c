@@ -18,7 +18,7 @@ void init_object(Object* object, vec3 position, vec3 rotation)
     object->speed.z = 0.0;
 }
 
-void update_object(Object* object, double time, Camera* camera)
+void update_object(Object* object, double time)
 {
     double angle;
     double side_angle;
@@ -32,17 +32,6 @@ void update_object(Object* object, double time, Camera* camera)
     object->position.y += sin(side_angle) * object->speed.x * time;
 
     object->position.z += object->speed.z * time;
-
-    /*updates the camera*/
-    camera->position = object->position;
-    camera->rotation.x = object->rotation.x;
-    camera->rotation.y = object->rotation.y;
-    camera->rotation.z = object->rotation.z;
-
-    /*offset of the camera*/
-    camera->position.x += cos(side_angle) * -6;
-    camera->position.y += sin(side_angle) * -6;
-    camera->position.z += 2;
 }
 
 void rotate_object(Object* object, double horizontal, double vertical)
@@ -65,11 +54,6 @@ void rotate_object(Object* object, double horizontal, double vertical)
     if (object->rotation.x > 360.0) {
         object->rotation.x -= 360.0;
     }
-
-    /*if (!(strcmp(object->name, "xwing")))     //causing "glitches" if assigning here
-    {
-        camera->rotation.z = object->rotation.z;
-    }*/
 }
 
 void set_object_speed(Object* object, double speed)
@@ -85,6 +69,21 @@ void set_object_side_speed(Object* object, double speed)
 void set_object_vertical_speed(Object* object, double speed)
 {
     object->speed.z = speed;
+}
+
+void follow_object(Camera* camera, Object* object) {
+    double side_angle;
+    side_angle = degree_to_radian(object->rotation.z + 90.0);
+
+    camera->position = object->position;
+    camera->rotation.x = object->rotation.x;
+    camera->rotation.y = object->rotation.y;
+    camera->rotation.z = object->rotation.z;
+
+    /*offset of the camera*/
+    camera->position.x += cos(side_angle) * -6;
+    camera->position.y += sin(side_angle) * -6;
+    camera->position.z += 2;
 }
 
 void update_Geostac_Loc(Object* object, double distance) {

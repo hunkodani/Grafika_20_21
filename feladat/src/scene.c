@@ -19,7 +19,6 @@ void init_scene(Scene* scene)
 
     /*xwing loading*/
     load_model(&scene->xwing.model, "resources/models/x-wing.obj");
-    strcpy(scene->xwing.name, "xwing");
     scale_model(&scene->xwing.model, 0.25f, 0.25f, 0.25f);
     scene->xwing.texture = load_texture("resources/textures/Xwing_Albedo.png");
 

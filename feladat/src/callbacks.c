@@ -97,7 +97,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'a':
         if (!scene.isPaused){
-            rotate_object(&(scene.xwing), 1, 0);
+            rotate_object(&(scene.xwing), 1, 0); follow_object(&camera, &(scene.xwing));
         }
         else {
             set_camera_side_speed(&camera, 1);
@@ -105,7 +105,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'd':
         if (!scene.isPaused) {
-            rotate_object(&(scene.xwing), -1, 0);
+            rotate_object(&(scene.xwing), -1, 0); follow_object(&camera, &(scene.xwing));
         }
         else {
             set_camera_side_speed(&camera, -1);
@@ -227,7 +227,8 @@ void idle()
     }
     else
     {
-        update_object(&(scene.xwing), elapsed_time, &camera);
+        update_object(&(scene.xwing), elapsed_time);
+        follow_object(&camera, &(scene.xwing));
     }
 
     update_lasers(scene.lasers, elapsed_time);

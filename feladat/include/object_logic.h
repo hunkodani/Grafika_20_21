@@ -12,7 +12,6 @@
  */
 typedef struct {
     Model model;
-    char name[20];
     vec3 position;
     vec3 rotation;
     vec3 speed;
@@ -61,7 +60,7 @@ void init_object(Object* object, vec3 position, vec3 rotation);
 /**
  * Update the position of the object.
  */
-void update_object(Object* object, double time, Camera* camera);
+void update_object(Object* object, double time);
 
 /**
  * Set the horizontal and vertical rotation of the object.
@@ -82,6 +81,11 @@ void set_object_side_speed(Object* object, double speed);
  * Set the speed of up and down side steps.
  */
 void set_object_vertical_speed(Object* object, double speed);
+
+/**
+ * Follows the selected object nad add an offset to the camera
+ */
+void follow_object(Camera* camera, Object* object);
 
 /**
  * Updates the position of the geostationary object.
