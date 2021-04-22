@@ -95,7 +95,7 @@ void show_help()
         "   Hajo:",
         "       W, A, S, D -> iranyitas (elore, hatra, balrafordulas, jobbrafordulas)",
         "       Q, E -- fel-le mozgas",
-        "       Eger Bal gomb -- lezeragyu loves(1 / kattintas, maximum 4)",
+        "       Eger Bal gomb -- lezeragyu loves(1 / kattintas)",
         "   Kamera: (pause mod)",
         "       W, A, S, D -> iranyitas (elore, hatra, balra, jobbra)",
         "       Q, E -- fel-le mozgas",
