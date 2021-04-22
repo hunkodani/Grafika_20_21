@@ -1,6 +1,6 @@
 #include "callbacks.h"
 #include "camera.h"
-#include "object_logic.h"
+#include "xwing.h"
 #include <ctype.h>
 
 void display()
@@ -57,7 +57,7 @@ void mouse(int button, int state, int x, int y)
         mouse_position.y = y;
     }
     else if (state == 0) {
-        shoot(&scene.xwing, scene.lasers); 
+        shoot(&scene.xwing.object, scene.laserbeam_dummy, &scene.head);
     }
     else {
         /*dummies*/
@@ -81,7 +81,7 @@ void keyboard(unsigned char key, int x, int y)
     switch (tolower(key)) {
     case 'w':
         if (!scene.isPaused) {
-            set_object_speed(&(scene.xwing), 30);
+            set_object_speed(&(scene.xwing.object), 30);
         }
         else {
             set_camera_speed(&camera, 1);
@@ -89,7 +89,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 's':
         if (!scene.isPaused){
-            set_object_speed(&(scene.xwing), -5);
+            set_object_speed(&(scene.xwing.object), -5);
         }
         else {
             set_camera_speed(&camera, -1);
@@ -97,7 +97,8 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'a':
         if (!scene.isPaused){
-            rotate_object(&(scene.xwing), 1, 0); follow_object(&camera, &(scene.xwing));
+            rotate_object(&(scene.xwing.object), 1, 0); 
+            follow_object(&camera, &(scene.xwing.object));
         }
         else {
             set_camera_side_speed(&camera, 1);
@@ -105,7 +106,8 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'd':
         if (!scene.isPaused) {
-            rotate_object(&(scene.xwing), -1, 0); follow_object(&camera, &(scene.xwing));
+            rotate_object(&(scene.xwing.object), -1, 0); 
+            follow_object(&camera, &(scene.xwing.object));
         }
         else {
             set_camera_side_speed(&camera, -1);
@@ -113,7 +115,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'q':
         if (!scene.isPaused) {
-            set_object_vertical_speed(&(scene.xwing), -10);
+            set_object_vertical_speed(&(scene.xwing.object), -10);
         }
         else {
             set_camera_vertical_speed(&camera, -1);
@@ -121,7 +123,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'e':
         if (!scene.isPaused) {
-            set_object_vertical_speed(&(scene.xwing), 10);
+            set_object_vertical_speed(&(scene.xwing.object), 10);
         }
         else {
             set_camera_vertical_speed(&camera, 1);
@@ -179,7 +181,7 @@ void keyboard_up(unsigned char key, int x, int y)
     case 'w':
     case 's':
         if (!scene.isPaused) {
-            set_object_speed(&(scene.xwing), 0.0);
+            set_object_speed(&(scene.xwing.object), 0.0);
         }
         else {
             set_camera_speed(&camera, 0.0);            
@@ -197,7 +199,7 @@ void keyboard_up(unsigned char key, int x, int y)
     case 'q':
     case 'e':
         if (!scene.isPaused) {
-            set_object_vertical_speed(&(scene.xwing), 0);
+            set_object_vertical_speed(&(scene.xwing.object), 0);
         }
         else {
             set_camera_vertical_speed(&camera, 0.0);
@@ -227,14 +229,14 @@ void idle()
     }
     else
     {
-        update_object(&(scene.xwing), elapsed_time);
-        follow_object(&camera, &(scene.xwing));
+        update_object(&(scene.xwing.object), elapsed_time);
+        follow_object(&camera, &(scene.xwing.object));
     }
 
-    update_lasers(scene.lasers, elapsed_time);
+    update_laserbeams(&scene.head, elapsed_time);
 
-    rotate_object(&(scene.geostatObj), 0.006, 0);
-    update_Geostac_Loc(&(scene.geostatObj), 800);
+    rotate_object(&(scene.geostatObj.object), 0.006, 0);
+    update_Geostac_Loc(&(scene.geostatObj.object), 800);
     
     glutPostRedisplay();
 }

@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "skybox.h"
+#include "bounding_box.h"
 
 #include <GL/glut.h>
 #include <obj/load.h>
@@ -16,58 +17,37 @@ void init_scene(Scene* scene)
     scene->fogIntensity = 0.0;
     weapon_rotation = 1;
     laser_travel_distance = 100;
+    scene->head = NULL;
 
     /*xwing loading*/
-    load_model(&scene->xwing.model, "resources/models/x-wing.obj");
-    scale_model(&scene->xwing.model, 0.25f, 0.25f, 0.25f);
-    scene->xwing.texture = load_texture("resources/textures/Xwing_Albedo.png");
+    load_model(&scene->xwing.object.model, "resources/models/x-wing.obj");
+    scale_model(&scene->xwing.object.model, 0.25f, 0.25f, 0.25f);
+    scene->xwing.object.texture = load_texture("resources/textures/Xwing_Albedo.png");
 
-    /*lasers loading*/
-    load_model(&scene->lasers[0].model, "resources/models/laser.obj");
-    scale_model(&scene->lasers[0].model, 0.25f, 0.25f, 0.25f);
-    scene->lasers[1].model = scene->lasers[0].model;
-    scene->lasers[2].model = scene->lasers[0].model;
-    scene->lasers[3].model = scene->lasers[0].model;
-    scene->lasers[0].texture = load_texture("resources/textures/laser_Albedo.png");
-    scene->lasers[1].texture = scene->lasers[0].texture;
-    scene->lasers[2].texture = scene->lasers[0].texture;
-    scene->lasers[3].texture = scene->lasers[0].texture;
+    /*laserbeam dummy loading*/
+    load_model(&scene->laserbeam_dummy.object.model, "resources/models/laser.obj");
+    scale_model(&scene->laserbeam_dummy.object.model, 0.25f, 0.25f, 0.25f);
+    scene->laserbeam_dummy.object.texture = load_texture("resources/textures/laser_Albedo.png");
 
     /*destinations loading*/
-    load_model(&scene->dest_point[0].model, "resources/models/destination.obj");
-    scene->dest_point[1].model = scene->dest_point[0].model;
-    scene->dest_point[0].texture = load_texture("resources/textures/destination_Albedo.png");
-    scene->dest_point[1].texture = scene->dest_point[0].texture;
-    setNewRandPosAndRot(&scene->dest_point[0], &scene->xwing, 60);
-    setNewRandPosAndRot(&scene->dest_point[1], &scene->xwing, 60);
+    load_model(&scene->dest_point[0].object.model, "resources/models/destination.obj");
+    scene->dest_point[1].object.model = scene->dest_point[0].object.model;
+    scene->dest_point[0].object.texture = load_texture("resources/textures/destination_Albedo.png");
+    scene->dest_point[1].object.texture = scene->dest_point[0].object.texture;
+    setNewRandPosAndRot(&scene->dest_point[0].object, &scene->xwing.object, 60);
+    setNewRandPosAndRot(&scene->dest_point[1].object, &scene->xwing.object, 60);
 
     /*targets loading*/
-    load_model(&scene->target[0].model, "resources/models/cube.obj");
-    scene->target[1].model = scene->target[0].model;
-    scene->target[0].texture = load_texture("resources/textures/cross.png");
-    scene->target[1].texture = scene->target[0].texture;
-    setNewRandPosAndRot(&scene->target[0], &scene->xwing, 50);
-    setNewRandPosAndRot(&scene->target[1], &scene->xwing, 50);
+    load_model(&scene->target[0].object.model, "resources/models/cube.obj");
+    scene->target[1].object.model = scene->target[0].object.model;
+    scene->target[0].object.texture = load_texture("resources/textures/cross.png");
+    scene->target[1].object.texture = scene->target[0].object.texture;
+    setNewRandPosAndRot(&scene->target[0].object, &scene->xwing.object, 50);
+    setNewRandPosAndRot(&scene->target[1].object, &scene->xwing.object, 50);
 
     /*asteroid loading*/
-    load_model(&scene->geostatObj.model, "resources/models/rocks.obj");
-    scene->geostatObj.texture = load_texture("resources/textures/Rocks_Albedo.png");
-    /*glBindTexture(GL_TEXTURE_2D, scene->texture_id);
-
-    scene->material.ambient.red = 0.2;
-    scene->material.ambient.green = 0.2;
-    scene->material.ambient.blue = 0.1;
-
-    scene->material.diffuse.red = 0.8;
-    scene->material.diffuse.green = 0.9;
-    scene->material.diffuse.blue = 0.5;
-
-    scene->material.specular.red = 0.4;
-    scene->material.specular.green = 0.6;
-    scene->material.specular.blue = 0.5;
-
-    scene->material.shininess = 40.0;*/
-
+    load_model(&scene->geostatObj.object.model, "resources/models/rocks.obj");
+    scene->geostatObj.object.texture = load_texture("resources/textures/Rocks_Albedo.png");
 }
 
 void set_lighting(Scene* scene)
@@ -130,6 +110,7 @@ void set_material(const Material* material)
 void draw_scene(Scene* scene)
 {
     int i, j;
+    LaserNode* current = scene->head;
 
     drawSkybox(scene, 3500.0f);
     set_lighting(scene);
@@ -140,78 +121,73 @@ void draw_scene(Scene* scene)
     glEnable(GL_TEXTURE_2D);
 
     glPushMatrix(); 
-        glBindTexture(GL_TEXTURE_2D, scene->xwing.texture);
-        glTranslatef(scene->xwing.position.x, scene->xwing.position.y, scene->xwing.position.z);
-        glRotatef(scene->xwing.rotation.z, 0.0f, 0.0f, 1.0f);
-        draw_model(&(scene->xwing.model));
+        glBindTexture(GL_TEXTURE_2D, scene->xwing.object.texture);
+        glTranslatef(scene->xwing.object.position.x, scene->xwing.object.position.y, scene->xwing.object.position.z);
+        glRotatef(scene->xwing.object.rotation.z, 0.0f, 0.0f, 1.0f);
+        draw_model(&(scene->xwing.object.model));
     glPopMatrix();
 
     for (j = 0; j < 2; j++)
     {
         /*needs to check if first collide to second or second collide to first (the second may contain the first, so first is not "collide with the second, because the points is outside")*/
-        if (is_collide(get_bounding_box(&scene->xwing.model, &scene->xwing.position), get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position))
-            || is_collide(get_bounding_box(&scene->dest_point[j].model, &scene->dest_point[j].position), get_bounding_box(&scene->xwing.model, &scene->xwing.position))
+        if (is_collide(get_bounding_box(&scene->xwing.object), get_bounding_box(&scene->dest_point[j].object))
+            || is_collide(get_bounding_box(&scene->dest_point[j].object), get_bounding_box(&scene->xwing.object))
             )
         {
             dest_counter++;
-            setNewRandPosAndRot(&scene->dest_point[j], &scene->xwing, 50);
+            setNewRandPosAndRot(&scene->dest_point[j].object, &scene->xwing.object, 50);
         }
     }
 
     for (i = 0; i < 2; i++)
     {
-        
         glPushMatrix();
-            glBindTexture(GL_TEXTURE_2D, scene->dest_point[i].texture);
-            glTranslatef(scene->dest_point[i].position.x, scene->dest_point[i].position.y, scene->dest_point[i].position.z);
-            glRotatef(scene->dest_point[i].rotation.z, 0.0f, 0.0f, 1.0f);
-            draw_model(&(scene->dest_point[i].model));
+            glBindTexture(GL_TEXTURE_2D, scene->dest_point[i].object.texture);
+            glTranslatef(scene->dest_point[i].object.position.x, scene->dest_point[i].object.position.y, scene->dest_point[i].object.position.z);
+            glRotatef(scene->dest_point[i].object.rotation.z, 0.0f, 0.0f, 1.0f);
+            draw_model(&(scene->dest_point[i].object.model));
         glPopMatrix();
     }
 
     for (i = 0; i < 2; i++)
     {
         glPushMatrix();
-            glBindTexture(GL_TEXTURE_2D, scene->target[i].texture);
-            glTranslatef(scene->target[i].position.x, scene->target[i].position.y, scene->target[i].position.z);
-            glRotatef(scene->target[i].rotation.z, 0.0f, 0.0f, 1.0f);
-            draw_model(&(scene->target[i].model));
+            glBindTexture(GL_TEXTURE_2D, scene->target[i].object.texture);
+            glTranslatef(scene->target[i].object.position.x, scene->target[i].object.position.y, scene->target[i].object.position.z);
+            glRotatef(scene->target[i].object.rotation.z, 0.0f, 0.0f, 1.0f);
+            draw_model(&(scene->target[i].object.model));
         glPopMatrix();
     }
     
-    for (i = 0; i < 4; i++)
+    while (current != NULL) 
     {
-        if (scene->lasers[i].is_alive) {
-            for (j = 0; j < 2; j++)
+        for (j = 0; j < 2; j++)
+        {
+            /*needs to check if first collide to second or second collide to first (the second may contain the first, so first is not "collide with the second, because the points is outside")*/
+            if (is_collide(get_bounding_box(&current->laserbeam.object), get_bounding_box(&scene->target[j].object))
+                || is_collide(get_bounding_box(&scene->target[j].object), get_bounding_box(&current->laserbeam.object))
+                )
             {
-                /*needs to check if first collide to second or second collide to first (the second may contain the first, so first is not "collide with the second, because the points is outside")*/
-                if (is_collide(get_bounding_box(&scene->lasers[i].model, &scene->lasers[i].position), get_bounding_box(&scene->target[j].model, &scene->target[j].position))
-                    || is_collide(get_bounding_box(&scene->target[j].model, &scene->target[j].position), get_bounding_box(&scene->lasers[i].model, &scene->lasers[i].position))
-                    ) 
-                {
-                    scene->lasers[i].is_alive = FALSE;
-                    target_counter++;
-                    setNewRandPosAndRot(&scene->target[j], &scene->xwing, 50);
-                }
+                target_counter++;
+                /*Not working properly*/
+                /*remove_by_position(&scene->head, current->laserbeam.object.position);*/
+                setNewRandPosAndRot(&scene->target[j].object, &scene->xwing.object, 50);
             }
         }
-        if (scene->lasers[i].is_alive)
-        {
-            glBindTexture(GL_TEXTURE_2D, scene->lasers[i].texture);
-            glPushMatrix();
-                glTranslatef(scene->lasers[i].position.x, scene->lasers[i].position.y, scene->lasers[i].position.z);
-                glRotatef(scene->lasers[i].rotation.z, 0.0f, 0.0f, 1.0f);
-                draw_model(&(scene->lasers[i].model));
-            glPopMatrix();
-        }        
-    }            
+        glBindTexture(GL_TEXTURE_2D, current->laserbeam.object.texture);
+        glPushMatrix();
+        glTranslatef(current->laserbeam.object.position.x, current->laserbeam.object.position.y, current->laserbeam.object.position.z);
+        glRotatef(current->laserbeam.object.rotation.z, 0.0f, 0.0f, 1.0f);
+        draw_model(&(current->laserbeam.object.model));
+        glPopMatrix();
+        current = current->next;
+    }
 
     glPushMatrix();
-        glBindTexture(GL_TEXTURE_2D, scene->geostatObj.texture);
-        glTranslatef(scene->geostatObj.position.x, scene->geostatObj.position.y, scene->geostatObj.position.z);
-        glRotatef(scene->geostatObj.rotation.z, 0.0f, 0.0f, 1.0f);
-        glScalef(1.0f, 1.0f, 1.0f);
-        draw_model(&(scene->geostatObj.model));
+        glBindTexture(GL_TEXTURE_2D, scene->geostatObj.object.texture);
+        glTranslatef(scene->geostatObj.object.position.x, scene->geostatObj.object.position.y, scene->geostatObj.object.position.z);
+        glRotatef(scene->geostatObj.object.rotation.z, 0.0f, 0.0f, 1.0f);
+        draw_model(&(scene->geostatObj.object.model));
     glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);

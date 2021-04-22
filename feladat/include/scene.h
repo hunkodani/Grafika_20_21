@@ -3,17 +3,21 @@
 
 #include "camera.h"
 #include "texture.h"
-#include "object_logic.h"
+#include "xwing.h"
+#include "destination_and_target.h"
+#include "laserbeam.h"
+#include "asteroids.h"
 #include <stdbool.h>
 
 typedef struct Scene
 {
-    Object xwing;
-    Laser lasers[4];
-    Object geostatObj;
-    Object dest_point[2];
-    Object target[2];
-    Material material;
+    Xwing xwing;
+    /*Laserbeam laserbeams[4];*/
+    Laserbeam laserbeam_dummy;
+    LaserNode* head;
+    Asteroids geostatObj;
+    Destination dest_point[2];
+    Target target[2];
     bool isPaused;
     double lightIntensity;
     float fogIntensity;
