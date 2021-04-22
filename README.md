@@ -26,7 +26,7 @@ Irányítás:
 * X-wing:
   * W, A, S, D         -> irányítás (előre, hátra, balrafordulás, jobbrafordulás)
   * Q, E               -> fel-le mozgása
-  * Egér Bal gomb      -> lézerágyú lövés (1/ kattintás, de maximum 4)
+  * Egér Bal gomb      -> lézerágyú lövés (1/ kattintás)
 * Kamera:
   * W, A, S, D         -> iranyitás ((előre, hátra, balra, jobbra)",
   * Q, E               -> fel-le mozgás",
@@ -36,7 +36,7 @@ Irányítás:
   * P                  -> "pause mód", azaz a kamerával spectator módban lehet mozogni
   * T                  -> helpbar
   * O                  -> origó megjelenítése, elrejtése",
-  * \+                  -> fény növelése",
-  * \-                  -> fény csökkentése",
+  * \+                 -> fény növelése",
+  * \-                 -> fény csökkentése",
   * /                  -> köd mértékének növelése",
-  * \*                  -> köd mértékének csökkentése"
+  * \*                 -> köd mértékének csökkentése"
